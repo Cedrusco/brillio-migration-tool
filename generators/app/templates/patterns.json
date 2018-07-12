@@ -1,0 +1,45 @@
+[{
+  "pattern": "import com.ibm.mq",
+  "complexity": 5
+},
+{
+  "pattern": "import com.ibm.mq.pcf",
+  "complexity": 5
+},
+{
+  "pattern": "MQQueueManager ",
+  "complexity": 6
+},
+{
+  "pattern": "MQQueue ",
+  "complexity": 6
+},
+{
+  "pattern": "MQGetMessageOptions ",
+  "complexity": 6
+},
+{
+  "pattern": "MQPutMessageOptions ",
+  "complexity": 6
+},
+{
+  "pattern": "MQMessage ",
+  "complexity": 6
+},
+{
+  "pattern": "MQException ",
+  "complexity": 4
+},
+{
+  "pattern": "CMQC",
+  "complexity": 4
+},
+{
+  "pattern": "CMQC",
+  "complexity": 4
+},
+{
+  "pattern": "PCFParameter",
+  "complexity": 6
+}
+]
