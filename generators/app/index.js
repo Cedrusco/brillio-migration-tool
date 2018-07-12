@@ -16,7 +16,7 @@ module.exports = class extends Generator {
       {
         type: 'input',
         name: 'classFilePath',
-        message: 'Enter the path of your Java classes:',
+        message: 'Enter the path of the directory containing your Java classes:',
         validate: function (input) {
           if (input.length === 0) {
             return 'You forgot to enter Java Class location!';

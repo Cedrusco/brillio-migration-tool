@@ -10,7 +10,7 @@ npm install -g yo
 npm install -g generator-mq
 ```
 
-Then generate your new project:
+Then check the complexity to migrate your project:
 
 ```bash
 yo mq
