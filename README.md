@@ -10,11 +10,20 @@ npm install -g yo
 npm install -g generator-mq
 ```
 
+## Configuration
+Reconfigure the pattern and its approximate complexity to migrate to AWS MQ in the 
+```bash
+./generators/app/templates/patterns.json
+```
+
+## Run
 Then check the complexity to migrate your project:
 
 ```bash
 yo mq
 ```
+And follow the instructions of the generator.
+At the end, you will find a Summary.json file in the root of your project to explain the complexity of migration.
 
 ## Getting To Know Yeoman
 
@@ -25,7 +34,7 @@ yo mq
 
 ## License
 
-MIT © [Saeid Eid](www.example.com)
+MIT © [Cedrus Digital](www.example.com)
 
 
 [npm-image]: https://badge.fury.io/js/generator-mq.svg

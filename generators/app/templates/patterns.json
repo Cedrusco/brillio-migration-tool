@@ -35,11 +35,43 @@
   "complexity": 4
 },
 {
-  "pattern": "CMQC",
+  "pattern": "PCFParameter",
+  "complexity": 6
+},
+{
+  "pattern": "MQQueueConnectionFactory",
+  "complexity": 6
+},
+{
+  "pattern": "import javax.jms",
   "complexity": 4
 },
 {
-  "pattern": "PCFParameter",
-  "complexity": 6
+  "pattern": "QueueConnection",
+  "complexity": 4
+},
+{
+  "pattern": "QueueSession",
+  "complexity": 4
+},
+{
+  "pattern": "QueueSender",
+  "complexity": 4
+},
+{
+  "pattern": "QueueReceiver",
+  "complexity": 4
+},
+{
+  "pattern": "JMSException",
+  "complexity": 4
+},
+{
+  "pattern": "import com.ibm.mq.jms.JMSC",
+  "complexity": 4
+},
+{
+  "pattern": "import com.ibm.mq.jms.MQQueueConnectionFactory",
+  "complexity": 4
 }
 ]
