@@ -23,7 +23,7 @@ Then check the complexity to migrate your project:
 yo mq
 ```
 And follow the instructions of the generator.
-At the end, you will find a Summary.json file in the root of your project to explain the complexity of migration.
+In the end, you will find a Summary.json file in the root of your project to explain the complexity of migration.
 
 ## Getting To Know Yeoman
 
