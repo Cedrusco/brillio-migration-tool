@@ -53,24 +53,22 @@ module.exports = class extends Generator {
           this.props.classFilePath,
           '.java$'
         );
-        for (let j = 0; j < results; j++) {
-          var res = results[results[j]];
-
-          if (overview.details[results[j]] === null) {
-            overview.details[results[j]] = {
+        for (var result in results) {
+          var res = results[result];
+          if (!overview.details[result]) {
+            overview.details[result] = {
               fileComplexity: 0,
               totalOccurences: 0,
               details: []
             };
           }
-          overview.details[results[j]].details.push({
+          overview.details[result].details.push({
             matches: res.matches[0],
             count: res.count,
             complexity: patterns[i].complexity
           });
-          overview.details[results[j]].fileComplexity +=
-            res.count * patterns[i].complexity;
-          overview.details[results[j]].totalOccurences += res.count;
+          overview.details[result].fileComplexity +=  res.count * patterns[i].complexity;
+          overview.details[result].totalOccurences += res.count;
         }
       }
       var totalComplexity = 0;
@@ -105,7 +103,7 @@ module.exports = class extends Generator {
       fs.writeFileSync('./summary.json', JSON.stringify(overview));
     } else if (this.props.mode === 'Replace Patterns') {
       const patterns = require('./templates/replace-patterns.json');
-      for (let i = 0; i < patterns.length; i++) {
+      for (var i = 0; i < patterns.length; i++) {
         var options = {
           files: this.props.classFilePath + '*.java',
           from: new RegExp(patterns[i].pattern, 'g'),
