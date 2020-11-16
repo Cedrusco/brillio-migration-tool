@@ -7,7 +7,7 @@ First, install [Yeoman](http://yeoman.io) and generator-mq using [npm](https://w
 
 ```bash
 npm install -g yo
-npm install -g generator-mq
+npm install -g ./
 ```
 
 ## Configuration

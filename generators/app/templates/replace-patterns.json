@@ -1,0 +1,6 @@
+[
+  {
+    "pattern": "import com.ibm.mq.*;",
+    "replaceWith": "// Import the actual library"
+  }
+]
