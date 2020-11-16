@@ -47,47 +47,45 @@ module.exports = class extends Generator {
         complexityValue: 0,
         details: {}
       };
-      for (var i = 0; i < patterns.length; i++) {
+      for (let i = 0; i < patterns.length; i++) {
         var results = await findInFilesSync(
           patterns[i].pattern,
           this.props.classFilePath,
           '.java$'
         );
-        for (var result in results) {
-          var res = results[result];
+        for (let j = 0; j < results; j++) {
+          var res = results[results[j]];
 
-          if (overview.details[result] == null) {
-            overview.details[result] = {
+          if (overview.details[results[j]] === null) {
+            overview.details[results[j]] = {
               fileComplexity: 0,
               totalOccurences: 0,
               details: []
             };
           }
-          overview.details[result].details.push({
+          overview.details[results[j]].details.push({
             matches: res.matches[0],
             count: res.count,
             complexity: patterns[i].complexity
           });
-          overview.details[result].fileComplexity =
-            overview.details[result].fileComplexity + res.count * patterns[i].complexity;
-          overview.details[result].totalOccurences =
-            overview.details[result].totalOccurences + res.count;
+          overview.details[results[j]].fileComplexity +=
+            res.count * patterns[i].complexity;
+          overview.details[results[j]].totalOccurences += res.count;
         }
       }
       var totalComplexity = 0;
       var totalFiles = 0;
       for (var file in overview.details) {
         console.log('File: ', file);
-        if (overview.details[file].totalOccurences == 0) {
+        if (overview.details[file].totalOccurences === 0) {
           overview.details[file].totalOccurences = 1;
         }
-        overview.details[file].fileComplexity =
-          overview.details[file].fileComplexity / overview.details[file].totalOccurences;
+        overview.details[file].fileComplexity /= overview.details[file].totalOccurences;
         delete overview.details[file].totalOccurences;
         totalComplexity += overview.details[file].fileComplexity;
         totalFiles++;
       }
-      if (totalFiles == 0) {
+      if (totalFiles === 0) {
         totalFiles = 1;
       }
       overview.complexityValue = totalComplexity / totalFiles;
@@ -107,15 +105,15 @@ module.exports = class extends Generator {
       fs.writeFileSync('./summary.json', JSON.stringify(overview));
     } else if (this.props.mode === 'Replace Patterns') {
       const patterns = require('./templates/replace-patterns.json');
-      for (var i = 0; i < patterns.length; i++) {
+      for (let i = 0; i < patterns.length; i++) {
         var options = {
           files: this.props.classFilePath + '*.java',
           from: new RegExp(patterns[i].pattern, 'g'),
           to: patterns[i].replaceWith
         };
         console.log(options);
-        var results = await replace(options);
-        console.log(results);
+        var replacements = await replace(options);
+        console.log(replacements);
       }
     }
   }
