@@ -1,0 +1,14 @@
+[
+  {
+    "pattern": "EXEC SQL BEGIN DECLARE SECTION",
+    "complexity": 5
+  },
+  {
+    "pattern": "EXEC SQL CONNECT TO",
+    "complexity": 4
+  },
+  {
+    "pattern": "EXEC SQL FETCH",
+    "complexity": 4
+  }
+]

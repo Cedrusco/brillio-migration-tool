@@ -19,12 +19,18 @@ module.exports = class extends Generator {
         choices: ['Calculate Complexity', 'Replace Patterns']
       },
       {
+        name: 'fileType',
+        type: 'list',
+        message: 'What is the language used in your project?',
+        choices: ['Java', 'C/C++']
+      },
+      {
         type: 'input',
         name: 'classFilePath',
-        message: 'Enter the path of the directory containing your Java classes:',
+        message: 'Enter the path of the directory containing files:',
         validate: function(input) {
           if (input.length === 0) {
-            return 'You forgot to enter Java Class location!';
+            return 'You forgot to enter your files location!';
           }
           var done = this.async();
           done(null, true);
@@ -39,19 +45,25 @@ module.exports = class extends Generator {
   }
 
   async writing() {
+    var fileType = '.java';
+    if (this.props.fileType == 'C/C++') {
+      fileType = '.c';
+    }
     if (this.props.mode === 'Calculate Complexity') {
       const patterns = require('./templates/patterns.json');
+      const c_patterns = require('./templates/c-patterns.json');
+      const actualPatterns = this.props.fileType == 'Java' ? patterns : c_patterns;
       var overview = {
         complexity: '',
         'Time Needed for Migration': '',
         complexityValue: 0,
         details: {}
       };
-      for (let i = 0; i < patterns.length; i++) {
+      for (let i = 0; i < actualPatterns.length; i++) {
         var results = await findInFilesSync(
-          patterns[i].pattern,
+          actualPatterns[i].pattern,
           this.props.classFilePath,
-          '.java$'
+          fileType + '$'
         );
         for (var result in results) {
           var res = results[result];
@@ -65,9 +77,10 @@ module.exports = class extends Generator {
           overview.details[result].details.push({
             matches: res.matches[0],
             count: res.count,
-            complexity: patterns[i].complexity
+            complexity: actualPatterns[i].complexity
           });
-          overview.details[result].fileComplexity +=  res.count * patterns[i].complexity;
+          overview.details[result].fileComplexity +=
+            res.count * actualPatterns[i].complexity;
           overview.details[result].totalOccurences += res.count;
         }
       }
@@ -103,13 +116,14 @@ module.exports = class extends Generator {
       fs.writeFileSync('./summary.json', JSON.stringify(overview));
     } else if (this.props.mode === 'Replace Patterns') {
       const patterns = require('./templates/replace-patterns.json');
-      for (var i = 0; i < patterns.length; i++) {
+      const c_patterns = require('./templates/replace-c-patterns.json');
+      const actualPatterns = this.props.fileType == 'Java' ? patterns : c_patterns;
+      for (var i = 0; i < actualPatterns.length; i++) {
         var options = {
-          files: this.props.classFilePath + '*.java',
-          from: new RegExp(patterns[i].pattern, 'g'),
-          to: patterns[i].replaceWith
+          files: this.props.classFilePath + '*' + fileType,
+          from: new RegExp(actualPatterns[i].pattern, 'g'),
+          to: actualPatterns[i].replaceWith
         };
-        console.log(options);
         var replacements = await replace(options);
         console.log(replacements);
       }

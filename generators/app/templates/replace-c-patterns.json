@@ -1,0 +1,6 @@
+[
+  {
+    "pattern": "EXEC SQL BEGIN DECLARE SECTION",
+    "replaceWith": "// Declare section, replace with other statements"
+  }
+]
