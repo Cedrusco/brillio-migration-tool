@@ -41,7 +41,8 @@
     "yosay": "^2.0.1",
     "node-notifier": ">=8.0.1",
     "yargs-parser": ">=13.1.2",
-    "mem": ">=4.0.0"
+    "mem": ">=4.0.0",
+    "extend": ">=3.0.2"
   },
   "jest": {
     "testEnvironment": "node"
