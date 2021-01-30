@@ -187,7 +187,7 @@ module.exports = class extends Generator {
       });
       convertToExcel(infos);
       let jsonString = JSON.stringify(infos);
-      fs.writeFile('../report.json', jsonString, function(result, error) {
+      fs.writeFile('report.json', jsonString, function(result, error) {
         console.log('ERROR: ', error);
       });
       console.log('infos: ', infos);
@@ -216,7 +216,7 @@ async function getFiles(dir) {
 
 var convertToExcel = function(report) {
   var xls = json2xls(report);
-  const filename = '../pcf-report.xlsx';
+  const filename = 'pcf-report.xlsx';
   fs.writeFileSync(filename, xls, 'binary', err => {
     if (err) {
       console.log('writeFileSync :', err);
