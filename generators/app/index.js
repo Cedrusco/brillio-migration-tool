@@ -9,6 +9,8 @@ const yaml = require('js-yaml');
 const { resolve } = require('path');
 const { readdir } = require('fs').promises;
 
+var json2xls = require('json2xls');
+
 module.exports = class extends Generator {
   prompting() {
     // Have Yeoman greet the user.
@@ -183,7 +185,11 @@ module.exports = class extends Generator {
         };
         infos.push(info);
       });
-
+      convertToExcel(infos);
+      let jsonString = JSON.stringify(infos);
+      fs.writeFile('../report.json', jsonString, function(result, error) {
+        console.log('ERROR: ', error);
+      });
       console.log('infos: ', infos);
     }
   }
@@ -207,3 +213,14 @@ async function getFiles(dir) {
   );
   return Array.prototype.concat(...files);
 }
+
+var convertToExcel = function(report) {
+  var xls = json2xls(report);
+  const filename = '../pcf-report.xlsx';
+  fs.writeFileSync(filename, xls, 'binary', err => {
+    if (err) {
+      console.log('writeFileSync :', err);
+    }
+    console.log(filename + ' file is saved!');
+  });
+};

@@ -34,15 +34,16 @@
   },
   "dependencies": {
     "chalk": "^2.1.0",
+    "extend": ">=3.0.2",
     "find-in-files": "^0.5.0",
     "js-yaml": "^4.0.0",
-    "replace-in-file": "^6.1.0",
-    "yeoman-generator": "^2.0.1",
-    "yosay": "^2.0.1",
-    "node-notifier": ">=8.0.1",
-    "yargs-parser": ">=13.1.2",
+    "json2xls": "^0.1.2",
     "mem": ">=4.0.0",
-    "extend": ">=3.0.2"
+    "node-notifier": ">=8.0.1",
+    "replace-in-file": "^6.1.0",
+    "yargs-parser": ">=13.1.2",
+    "yeoman-generator": "^2.0.1",
+    "yosay": "^2.0.1"
   },
   "jest": {
     "testEnvironment": "node"
