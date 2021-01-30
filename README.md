@@ -1,5 +1,6 @@
 # generator-mq [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > Checking the complexity of migrating from IBM MQ to AWS MQ
+> Generate a PCF Report of Applications
 
 ## Installation
 
