@@ -1,5 +1,7 @@
-# generator-cedrusMigrationTool [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-CMT [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > Generate reports on various migration types
+
+# Cedrus Migration Tool
 
 ## Installation
 
@@ -20,7 +22,7 @@ For mq migrations, reconfigure the pattern and its approximate complexity to mig
 Check the complexity to migrate your project:
 
 ```bash
-yo mq
+yo CMT
 ```
 And follow the instructions of the generator.
 
