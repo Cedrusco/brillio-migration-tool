@@ -187,7 +187,7 @@ module.exports = class extends Generator {
       });
       convertToExcel(infos);
       let jsonString = JSON.stringify(infos);
-      fs.writeFile('report.json', jsonString, function(result, error) {
+      fs.writeFile('pcf-report.json', jsonString, function(result, error) {
         console.log('ERROR: ', error);
       });
       console.log('infos: ', infos);
