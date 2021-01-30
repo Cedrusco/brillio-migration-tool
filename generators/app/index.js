@@ -5,6 +5,9 @@ const yosay = require('yosay');
 var findInFiles = require('find-in-files');
 const replace = require('replace-in-file');
 const fs = require('fs');
+const yaml = require('js-yaml');
+const { resolve } = require('path');
+const { readdir } = require('fs').promises;
 
 module.exports = class extends Generator {
   prompting() {
@@ -15,14 +18,18 @@ module.exports = class extends Generator {
       {
         name: 'mode',
         type: 'list',
-        message: 'Do you want to calculate the complexity or replace the patterns?',
-        choices: ['Calculate Complexity', 'Replace Patterns']
+        message: 'What do you want to do?',
+        choices: [
+          'Calculate Complexity for MQ Migration',
+          'Replace Patterns in Files',
+          'Generate PCF Migration Report'
+        ]
       },
       {
         name: 'fileType',
         type: 'list',
         message: 'What is the language used in your project?',
-        choices: ['Java', 'C/C++']
+        choices: ['Java', 'C/C++', 'Yaml']
       },
       {
         type: 'input',
@@ -46,13 +53,15 @@ module.exports = class extends Generator {
 
   async writing() {
     var fileType = '.java';
-    if (this.props.fileType == 'C/C++') {
+    if (this.props.fileType === 'C/C++') {
       fileType = '.c';
+    } else if (this.props.fileType === 'Yaml') {
+      fileType = '.yml';
     }
-    if (this.props.mode === 'Calculate Complexity') {
+    if (this.props.mode === 'Calculate Complexity for MQ Migration') {
       const patterns = require('./templates/patterns.json');
-      const c_patterns = require('./templates/c-patterns.json');
-      const actualPatterns = this.props.fileType == 'Java' ? patterns : c_patterns;
+      const cPatterns = require('./templates/c-patterns.json');
+      const actualPatterns = this.props.fileType == 'Java' ? patterns : cPatterns;
       var overview = {
         complexity: '',
         'Time Needed for Migration': '',
@@ -114,10 +123,10 @@ module.exports = class extends Generator {
         overview['Time Needed for Migration'] = '5 Days';
       }
       fs.writeFileSync('./summary.json', JSON.stringify(overview));
-    } else if (this.props.mode === 'Replace Patterns') {
+    } else if (this.props.mode === 'Replace Patterns in Files') {
       const patterns = require('./templates/replace-patterns.json');
-      const c_patterns = require('./templates/replace-c-patterns.json');
-      const actualPatterns = this.props.fileType == 'Java' ? patterns : c_patterns;
+      const cPatterns = require('./templates/replace-c-patterns.json');
+      const actualPatterns = this.props.fileType === 'Java' ? patterns : cPatterns;
       for (var i = 0; i < actualPatterns.length; i++) {
         var options = {
           files: this.props.classFilePath + '*' + fileType,
@@ -127,6 +136,55 @@ module.exports = class extends Generator {
         var replacements = await replace(options);
         console.log(replacements);
       }
+    } else if (this.props.mode === 'Generate PCF Migration Report') {
+      let infos = [];
+      let files = await getFiles(this.props.classFilePath);
+      const MANIFEST = '/manifest.yml';
+      let neededFiles = files.filter(function(str) {
+        return str.indexOf(MANIFEST) > -1;
+      });
+      let ENVIRONMENTS = ['dev', 'qa', 'uat', 'prod', 'dr'];
+      neededFiles.forEach(function(item) {
+        let jsonObject = yaml.load(fs.readFileSync(item, { encoding: 'utf-8' }));
+        let applications = jsonObject.applications;
+        let appName = applications
+          .filter(function(application) {
+            return application.name.indexOf('-' + ENVIRONMENTS[0] + '-') > -1;
+          })[0]
+          .name.split('-' + ENVIRONMENTS[0] + '-')[0];
+        let services = applications[0].services;
+        let instances = {};
+        applications.forEach(function(application) {
+          for (let i = 0; i < ENVIRONMENTS.length; i++) {
+            if (application.name.indexOf('-' + ENVIRONMENTS[i] + '-') > -1) {
+              instances[ENVIRONMENTS[i]] = application.instances;
+              break;
+            }
+          }
+        });
+
+        let appPath = item.split(MANIFEST)[0];
+        let autoFilePath = appPath + '/autoscaler-manifest.yml';
+        let autoscaling = 'N/A';
+        try {
+          let autoJson = yaml.load(fs.readFileSync(autoFilePath, { encoding: 'utf-8' }));
+          let instanceLimits = autoJson.instance_limits;
+          autoscaling = 'Min: ' + instanceLimits.min + ' Max: ' + instanceLimits.max;
+        } catch (e) {
+          console.log('No autoscaler');
+        }
+        let info = {
+          AppName: appName,
+          Services: services,
+          Autoscaling: autoscaling,
+          'Default Instances': instances,
+          Complexity: 'Medium',
+          Comments: ''
+        };
+        infos.push(info);
+      });
+
+      console.log('infos: ', infos);
     }
   }
 };
@@ -137,4 +195,15 @@ function findInFilesSync(pattern, directoryPath, fileExtension) {
       resolve(results);
     });
   });
+}
+
+async function getFiles(dir) {
+  const dirents = await readdir(dir, { withFileTypes: true });
+  const files = await Promise.all(
+    dirents.map(dirent => {
+      const res = resolve(dir, dirent.name);
+      return dirent.isDirectory() ? getFiles(res) : res;
+    })
+  );
+  return Array.prototype.concat(...files);
 }
