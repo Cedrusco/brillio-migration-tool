@@ -168,8 +168,8 @@ module.exports = class extends Generator {
         let autoscaling = 'N/A';
         try {
           let autoJson = yaml.load(fs.readFileSync(autoFilePath, { encoding: 'utf-8' }));
-          let instance_limits = autoJson.instance_limits;
-          autoscaling = 'Min: ' + instance_limits.min + ' Max: ' + instance_limits.max;
+          let instanceLimits = autoJson.instance_limits;
+          autoscaling = 'Min: ' + instanceLimits.min + ' Max: ' + instanceLimits.max;
         } catch (e) {
           console.log('No autoscaler');
         }
