@@ -1,6 +1,5 @@
-# generator-mq [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> Checking the complexity of migrating from IBM MQ to AWS MQ
-> Generate a PCF Report of Applications
+# generator-cedrusMigrationTool [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+> Generate reports on various migration types
 
 ## Installation
 
@@ -12,19 +11,25 @@ npm install -g ./
 ```
 
 ## Configuration
-Reconfigure the pattern and its approximate complexity to migrate to AWS MQ in the 
+For mq migrations, reconfigure the pattern and its approximate complexity to migrate to AWS MQ in the 
 ```bash
 ./generators/app/templates/patterns.json
 ```
 
 ## Run
-Then check the complexity to migrate your project:
+Check the complexity to migrate your project:
 
 ```bash
 yo mq
 ```
 And follow the instructions of the generator.
-In the end, you will find a Summary.json file in the root of your project to explain the complexity of migration.
+
+## Results
+### MQ Migration
+You will find a Summary.json file in the root of your project to explain the complexity of migration.
+
+### PCF Migration
+You will find a pcf-report.json and pcf-report.xlsx in the root directory of you project or in the path you ran the tool.
 
 ## Getting To Know Yeoman
 
