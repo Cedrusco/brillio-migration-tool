@@ -41,6 +41,7 @@
     "mem": ">=4.0.0",
     "node-notifier": ">=8.0.1",
     "replace-in-file": "^6.1.0",
+    "xml-js": "^1.6.11",
     "yargs-parser": ">=13.1.2",
     "yeoman-generator": "^2.0.1",
     "yosay": "^2.0.1"
