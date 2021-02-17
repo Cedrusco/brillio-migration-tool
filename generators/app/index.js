@@ -163,17 +163,14 @@ module.exports = class extends Generator {
       let infos = [];
       let files = await getFiles(this.props.classFilePath);
       // Console.log('++++++++++++++++++++++++++++++', files);
-
       // Manifest.yml
       // Windows
       const MANIFEST = '\\manifest.yml';
-
       // MacOS
       // const MANIFEST = 'manigest.yml'
       let neededFiles = files.filter(function(str) {
         return str.indexOf(MANIFEST) > -1;
       });
-
       let ENVIRONMENTS = ['dev', 'qa', 'uat', 'prod', 'dr'];
 
       // Console.log('++++++++++++++++++++++++++++++', neededFiles);
@@ -191,37 +188,29 @@ module.exports = class extends Generator {
         let instances = {};
         let stacks = {};
         let buildpacks = {};
-
         if (applications) {
           const filteredApp = applications.filter(function(application) {
             return application.name.indexOf('-' + ENVIRONMENTS[0] + '-') > -1;
           });
-
           if (filteredApp && filteredApp[0] && filteredApp[0].name) {
             appName = filteredApp[0].name.split('-' + ENVIRONMENTS[0] + '-')[0];
           }
-
           if (!appName) {
             appName;
           }
-
           services = applications[0].services ? applications[0].services : [];
-
           applications.forEach(function(application) {
             for (let i = 0; i < ENVIRONMENTS.length; i++) {
               if (application.name.indexOf('-' + ENVIRONMENTS[i] + '-') > -1) {
                 instances[ENVIRONMENTS[i]] = application.instances;
-
                 if (application.stack) {
                   stacks[ENVIRONMENTS[i]] = application.stack;
                 }
-
                 if (application.buildpack || application.buildpacks) {
                   buildpacks[ENVIRONMENTS[i]] = application.buildpack
                     ? application.buildpack
                     : application.buildpacks.toString();
                 }
-
                 break;
               }
             }
@@ -235,35 +224,28 @@ module.exports = class extends Generator {
         // MacOS
         // let autoFilePath = appPath + 'autoscaler-manifest.yml';
         let autoscaling = 'N/A';
-
         try {
           let autoJson = yaml.load(
             fs.readFileSync(autoFilePath, { encoding: 'utf-8' })
           );
-
           let instanceLimits = autoJson.instance_limits;
-
           autoscaling =
             'Min: ' + instanceLimits.min + ' Max: ' + instanceLimits.max;
         } catch (e) {
           console.log('No autoscaler present.');
         }
-
         // Jenkinsfile
         // Windows
         let jenkinsFilePath = appPath + '\\Jenkinsfile';
         // MacOS
         // let jenkinsFilePath = appPath + 'Jenkinsfile';
         let libraries = [];
-
         try {
           if (fs.existsSync(jenkinsFilePath)) {
             let jenkinsFileText = fs.readFileSync(jenkinsFilePath, {
               encoding: 'utf-8',
             });
-
             const regexp = /^@Library/g;
-
             let match;
             while ((match = regexp.exec(jenkinsFileText)) !== null) {
               libraries.push(jenkinsFileText.split(/\r?\n/)[match.index]);
@@ -272,7 +254,6 @@ module.exports = class extends Generator {
         } catch (e) {
           console.log('No Jenkinsfile present.');
         }
-
         // Pom.xml
         // Windows
         let pomFilePath = appPath + '\\pom.xml';
@@ -280,48 +261,38 @@ module.exports = class extends Generator {
         // let pomFilePath = appPath + 'pom.xml';
         let javaPlugins = [];
         let javaDependencies = [];
-
         try {
           if (fs.existsSync(pomFilePath)) {
             let pomFileText = fs.readFileSync(pomFilePath, {
               encoding: 'utf-8',
             });
-
             let pomFileObject = convert.xml2js(pomFileText, {
               compact: true,
               spaces: 4,
             });
-
             let allPlugins = JSON.stringify(
               pomFileObject.project.build.plugins
             );
-
             if (allPlugins.includes('java-cfenv-boot' || 'io.pivotal.cfenv')) {
               javaPlugins.push('java-cfenv-boot');
             }
-
             if (allPlugins.includes('spring-cloud-cloudfoundry')) {
               javaPlugins.push('spring-cloud-cloudfoundry');
             }
-
             if (allPlugins.includes('cloudfoundry' || 'cloud foundry')) {
               javaPlugins.push('cloud foundry dependency');
             }
-
             let allDependencies = JSON.stringify(
               pomFileObject.project.dependencies.dependency
             );
-
             if (
               allDependencies.includes('java-cfenv-boot' || 'io.pivotal.cfenv')
             ) {
               javaPlugins.push('java-cfenv-boot');
             }
-
             if (allDependencies.includes('spring-cloud-cloudfoundry')) {
               javaPlugins.push('spring-cloud-cloudfoundry');
             }
-
             if (allDependencies.includes('cloudfoundry' || 'cloud foundry')) {
               javaPlugins.push('cloud foundry dependency');
             }
@@ -329,7 +300,6 @@ module.exports = class extends Generator {
         } catch (e) {
           console.log('No pom file present.');
         }
-
         // Package.json
         // Windows
         let packageFilePath = appPath + '\\package.json';
@@ -337,20 +307,17 @@ module.exports = class extends Generator {
         // let packageFilePath = appPath + 'package.json';
         let nginxDependencies = [];
         let nginxDevDependencies = [];
-
         try {
           if (fs.existsSync(packageFilePath)) {
             let packageFileContents = fs.readFileSync(packageFilePath, {
               encoding: 'utf-8',
             });
-
             let packageFileObject = JSON.parse(packageFileContents);
             let allNginxDependencies = JSON.stringify(
               packageFileObject.dependencies
             );
             if (allNginxDependencies.includes('cloudfoundry'))
               nginxDependencies.push('cloudfoundry');
-
             let allNginxDevDependencies = JSON.stringify(
               packageFileObject.devDependencies
             );
@@ -360,7 +327,6 @@ module.exports = class extends Generator {
         } catch (e) {
           console.log('No package.json present.');
         }
-
         // Calculate complexity based on prod instances
         let complexity;
         if (!instances.prod || instances.prod < 2) {
@@ -370,13 +336,11 @@ module.exports = class extends Generator {
         } else if (instances.prod > 4) {
           complexity = 'High';
         }
-
         // Windows
         let repoNameArray = appPath.split('\\');
         // MacOS
         // let repoNameArray = appPath.split('/');
         let repoName = repoNameArray[repoNameArray.length - 1];
-
         let info = {
           RepoName: repoName,
           AppName: appName ? appName : appPath,
@@ -399,9 +363,7 @@ module.exports = class extends Generator {
             ? nginxDependencies[0]
             : '',
         };
-
         infos.push(info);
-
         let j = Math.max(
           services.length,
           javaPlugins.length,
