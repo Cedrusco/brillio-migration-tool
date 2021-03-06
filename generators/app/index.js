@@ -168,12 +168,12 @@ module.exports = class extends Generator {
       let files = await getFiles(this.props.classFilePath);
       // Console.log('++++++++++++++++++++++++++++++', files);
       // Manifest.yml
-      let MANIFEST = 'manifest.yml';
+      let manifestFile = 'manifest.yml';
       if (opsys === 'Windows') {
-        MANIFEST = '\\manifest.yml';
+        manifestFile = '\\manifest.yml';
       }
       let neededFiles = files.filter(function(str) {
-        return str.indexOf(MANIFEST) > -1;
+        return str.indexOf(manifestFile) > -1;
       });
       let ENVIRONMENTS = ['dev', 'qa', 'uat', 'prod', 'dr'];
 
@@ -222,7 +222,7 @@ module.exports = class extends Generator {
         }
 
         // Autoscaler-manifest
-        let appPath = item.split(MANIFEST)[0];
+        let appPath = item.split(manifestFile)[0];
         let autoFilePath = appPath + 'autoscaler-manifest.yml';
         if (opsys === 'Windows') {
           autoFilePath = appPath + '\\autoscaler-manifest.yml';
