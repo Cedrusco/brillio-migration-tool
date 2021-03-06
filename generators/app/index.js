@@ -160,14 +160,18 @@ module.exports = class extends Generator {
         console.log(replacements);
       }
     } else if (this.props.mode === 'Generate PCF Migration Report') {
+      let opsys = 'MacOS';
+      if (process.platform === 'win32' || process.platform === 'win64') {
+        opsys = 'Windows';
+      }
       let infos = [];
       let files = await getFiles(this.props.classFilePath);
       // Console.log('++++++++++++++++++++++++++++++', files);
       // Manifest.yml
-      // Windows
-      const MANIFEST = '\\manifest.yml';
-      // MacOS
-      // const MANIFEST = 'manigest.yml'
+      let MANIFEST = 'manifest.yml';
+      if (opsys === 'Windows') {
+        MANIFEST = '\\manifest.yml';
+      }
       let neededFiles = files.filter(function(str) {
         return str.indexOf(MANIFEST) > -1;
       });
@@ -219,10 +223,10 @@ module.exports = class extends Generator {
 
         // Autoscaler-manifest
         let appPath = item.split(MANIFEST)[0];
-        // Windows
-        let autoFilePath = appPath + '\\autoscaler-manifest.yml';
-        // MacOS
-        // let autoFilePath = appPath + 'autoscaler-manifest.yml';
+        let autoFilePath = appPath + 'autoscaler-manifest.yml';
+        if (opsys === 'Windows') {
+          autoFilePath = appPath + '\\autoscaler-manifest.yml';
+        }
         let autoscaling = 'N/A';
         try {
           let autoJson = yaml.load(
@@ -234,11 +238,12 @@ module.exports = class extends Generator {
         } catch (e) {
           console.log('No autoscaler present.');
         }
+
         // Jenkinsfile
-        // Windows
-        let jenkinsFilePath = appPath + '\\Jenkinsfile';
-        // MacOS
-        // let jenkinsFilePath = appPath + 'Jenkinsfile';
+        let jenkinsFilePath = appPath + 'Jenkinsfile';
+        if (opsys === 'Windows') {
+          jenkinsFilePath = appPath + '\\Jenkinsfile';
+        }
         let libraries = [];
         try {
           if (fs.existsSync(jenkinsFilePath)) {
@@ -254,11 +259,12 @@ module.exports = class extends Generator {
         } catch (e) {
           console.log('No Jenkinsfile present.');
         }
+
         // Pom.xml
-        // Windows
-        let pomFilePath = appPath + '\\pom.xml';
-        // MacOS
-        // let pomFilePath = appPath + 'pom.xml';
+        let pomFilePath = appPath + 'pom.xml';
+        if (opsys === 'Windows') {
+          pomFilePath = appPath + '\\pom.xml';
+        }
         let javaPlugins = [];
         let javaDependencies = [];
         try {
@@ -300,11 +306,12 @@ module.exports = class extends Generator {
         } catch (e) {
           console.log('No pom file present.');
         }
+
         // Package.json
-        // Windows
-        let packageFilePath = appPath + '\\package.json';
-        // MacOS
-        // let packageFilePath = appPath + 'package.json';
+        let packageFilePath = appPath + 'package.json';
+        if (opsys === 'Windows') {
+          packageFilePath = appPath + '\\package.json';
+        }
         let nginxDependencies = [];
         let nginxDevDependencies = [];
         try {
@@ -336,10 +343,11 @@ module.exports = class extends Generator {
         } else if (instances.prod > 4) {
           complexity = 'High';
         }
-        // Windows
-        let repoNameArray = appPath.split('\\');
-        // MacOS
-        // let repoNameArray = appPath.split('/');
+
+        let repoNameArray = appPath.split('/');
+        if (opsys === 'Windows') {
+          repoNameArray = appPath.split('\\');
+        }
         let repoName = repoNameArray[repoNameArray.length - 1];
         let info = {
           RepoName: repoName,
