@@ -1,5 +1,5 @@
 {
-  "name": "generator-CMT",
+  "name": "generator-cmt",
   "version": "1.0.0",
   "description": "Tool for generating reports on various migration types",
   "homepage": "www.cedrus.digital",
@@ -50,7 +50,6 @@
     "testEnvironment": "node"
   },
   "scripts": {
-    "prepublishOnly": "nsp check",
     "pretest": "eslint .",
     "precommit": "lint-staged",
     "test": "jest"

@@ -1,4 +1,4 @@
-# generator-CMT [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-cmt [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > Generate reports on various migration types
 
 # Cedrus Migration Tool
@@ -22,7 +22,7 @@ For mq migrations, reconfigure the pattern and its approximate complexity to mig
 Check the complexity to migrate your project:
 
 ```bash
-yo CMT
+yo cmt
 ```
 And follow the instructions of the generator.
 
