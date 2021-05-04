@@ -1,6 +1,6 @@
 {
   "name": "generator-cmt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tool for generating reports on various migration types",
   "homepage": "www.cedrus.digital",
   "author": {
@@ -86,6 +86,6 @@
       "prettier"
     ]
   },
-  "repository": "SaeidEid/generator-mq",
+  "repository": "Cedrusco/mq-migration-tool",
   "license": "MIT"
 }

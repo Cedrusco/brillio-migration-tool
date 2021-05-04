@@ -9,7 +9,7 @@ First, install [Yeoman](http://yeoman.io) and generator-mq using [npm](https://w
 
 ```bash
 npm install -g yo
-npm install -g ./
+npm install -g generator-cmt
 ```
 
 ## Configuration 
@@ -57,9 +57,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-[npm-image]: https://badge.fury.io/js/generator-mq.svg
-[npm-url]: https://npmjs.org/package/generator-mq
-[travis-image]: https://travis-ci.org/SaeidEid/generator-mq.svg?branch=master
-[travis-url]: https://travis-ci.org/SaeidEid/generator-mq
-[daviddm-image]: https://david-dm.org/SaeidEid/generator-mq.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/SaeidEid/generator-mq
+[npm-image]: https://badge.fury.io/js/generator-cmt.svg
+[npm-url]: https://www.npmjs.com/package/generator-cmt
+[travis-image]: https://travis-ci.org/Cedrusco/mq-migration-tool.svg?branch=master
+[travis-url]: https://travis-ci.org/Cedrusco/mq-migration-tool
+[daviddm-image]: https://david-dm.org/Cedrusco/mq-migration-tool.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/Cedrusco/mq-migration-tool
