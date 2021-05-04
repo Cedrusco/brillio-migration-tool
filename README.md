@@ -12,7 +12,7 @@ npm install -g yo
 npm install -g ./
 ```
 
-## Configuration
+## Configuration 
 For mq migrations, reconfigure the pattern and its approximate complexity to migrate to AWS MQ in the 
 ```bash
 ./generators/app/templates/patterns.json
