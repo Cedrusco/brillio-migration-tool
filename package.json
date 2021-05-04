@@ -2,11 +2,11 @@
   "name": "generator-CMT",
   "version": "0.0.0",
   "description": "Tool for generating reports on various migration types",
-  "homepage": "www.example.com",
+  "homepage": "www.cedrus.digital",
   "author": {
     "name": "Saeid Eid",
     "email": "saeid.eid@cedrusco.com",
-    "url": "www.example.com"
+    "url": "www.cedrus.digital"
   },
   "files": [
     "generators"
