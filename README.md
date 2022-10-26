@@ -1,7 +1,7 @@
 # generator-cmt [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > Generate reports on various migration types
 
-# Cedrus Migration Tool
+# Brillio Migration Tool
 
 ## Installation
 
