@@ -42,7 +42,7 @@ You will find a pcf-report.json and pcf-report.xlsx in the root directory of you
 
 ## License
 
-Copyright 2018 Cedrus Digital
+Copyright 2018 Brillio Digital
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
