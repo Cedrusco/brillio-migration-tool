@@ -33,7 +33,9 @@
     "npm": ">= 4.0.0"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "chalk": "^2.1.0",
+    "excel4node": "^1.7.2",
     "extend": ">=3.0.2",
     "find-in-files": "^0.5.0",
     "js-yaml": "^4.0.0",
