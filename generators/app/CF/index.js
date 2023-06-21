@@ -88,39 +88,92 @@ const getBuildPacks = ({ success }) => {
         });
 };
 
-const getAppInfo = () => {
-    const url = CF_ORG_ID ? `${CF_ENDPOINT}/v3/apps` : `${CF_ENDPOINT}/v3/apps?organization_guids=${CF_ORG_ID}`
-    axios({
+// const getAppInfo = () => {
+//     const url = CF_ORG_ID ? `${CF_ENDPOINT}/v3/apps` : `${CF_ENDPOINT}/v3/apps?organization_guids=${CF_ORG_ID}`
+//     axios({
+//         method: 'get',
+//         url,
+//         headers: {
+//             'Content-Type': 'application/json',
+//             Accept: 'application/json',
+//             Authorization: CF_AUTH_TOKEN
+//         }
+//     })
+//         .then(response => {
+//             appCount = response.data.pagination.total_results;
+//             response.data.resources.forEach(resource => {
+//                 apps.push({
+//                     name: resource.name,
+//                     id: resource.guid
+//                 });
+
+//                 resource.lifecycle.data.buildpacks.forEach(buildPack => {
+//                     if (buildPackToAppMap[buildPack]) {
+//                         buildPackToAppMap[buildPack].push(resource.name);
+//                     } else {
+//                         buildPackToAppMap[buildPack] = [resource.name];
+//                     }
+//                 });
+//             });
+//             getEnvForApps();
+//         })
+//         .catch(error => {
+//             console.error('error getting apps', error);
+//         });
+// };
+
+const getAppInfo = async () => {
+  let page = 1;
+  let allApps = [];
+
+  while (true) {
+    const url = CF_ORG_ID !== ''
+      ? `${CF_ENDPOINT}/v3/apps?page=${page}`
+      : `${CF_ENDPOINT}/v3/apps?organization_guids=${CF_ORG_ID}&page=${page}`;
+
+    try {
+      const response = await axios({
         method: 'get',
         url,
         headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-            Authorization: CF_AUTH_TOKEN
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+          Authorization: CF_AUTH_TOKEN
         }
-    })
-        .then(response => {
-            appCount = response.data.pagination.total_results;
-            response.data.resources.forEach(resource => {
-                apps.push({
-                    name: resource.name,
-                    id: resource.guid
-                });
+      });
 
-                resource.lifecycle.data.buildpacks.forEach(buildPack => {
-                    if (buildPackToAppMap[buildPack]) {
-                        buildPackToAppMap[buildPack].push(resource.name);
-                    } else {
-                        buildPackToAppMap[buildPack] = [resource.name];
-                    }
-                });
-            });
-            getEnvForApps();
-        })
-        .catch(error => {
-            console.error('error getting apps', error);
-        });
+      const apps = response.data.resources.map(resource => ({
+        name: resource.name,
+        id: resource.guid
+      }));
+
+      allApps = allApps.concat(apps);
+
+      if (response.data.pagination.total_pages === page) {
+        break; // Exit the loop if all pages have been fetched
+      }
+
+      page++;
+    } catch (error) {
+      console.error('Error getting apps', error);
+      break;
+    }
+  }
+
+  appCount = allApps.length;
+  allApps.forEach(app => {
+    app.lifecycle.data.buildpacks.forEach(buildPack => {
+      if (buildPackToAppMap[buildPack]) {
+        buildPackToAppMap[buildPack].push(app.name);
+      } else {
+        buildPackToAppMap[buildPack] = [app.name];
+      }
+    });
+  });
+
+  getEnvForApps();
 };
+
 
 const getEnvForApps = () => {
     axios
