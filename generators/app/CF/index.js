@@ -144,7 +144,8 @@ const getAppInfo = async () => {
 
       const apps = response.data.resources.map(resource => ({
         name: resource.name,
-        id: resource.guid
+        id: resource.guid,
+        lifecycle: resource.lifecycle
       }));
 
       allApps = allApps.concat(apps);
@@ -171,6 +172,7 @@ const getAppInfo = async () => {
     });
   });
 
+    apps = allApps;
   getEnvForApps();
 };
 
